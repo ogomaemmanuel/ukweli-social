@@ -8,6 +8,7 @@ import com.ogoma.blog.content.dto.BlogCreateRequest;
 import com.ogoma.blog.content.repository.BlogRepository;
 import com.ogoma.blog.content.viewmodels.BlogCardViewModel;
 import com.ogoma.blog.content.viewmodels.BlogEditViewModel;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class BlogService {
     }
 
     public void addComment(Long blogId, BlogCommentCreateRequest commentCreateRequest) {
-        if (this.blogRepository.existsById(blogId)) {
+        try {
             // TODO Fetching by id then updating is an ant pattern, you may also reach the column limit in postgres, 1600
             BlogEntity blogEntity = this.blogRepository.getReferenceById(blogId);
             BlogCommentsEntity comments = new BlogCommentsEntity();
@@ -39,9 +40,10 @@ public class BlogService {
             comments.setComment(commentCreateRequest.getComment());
             blogEntity.addComment(comments);
             this.blogRepository.save(blogEntity);
-            return;
+        } catch (EntityNotFoundException entityNotFoundException) {
+            throw new RecordNotFoundException("No blog exist with id" + blogId);
         }
-        throw new RecordNotFoundException("No blog exist with id" + blogId);
+
     }
 
     public Page<BlogCardViewModel> getBlogs(Pageable pageable) {
