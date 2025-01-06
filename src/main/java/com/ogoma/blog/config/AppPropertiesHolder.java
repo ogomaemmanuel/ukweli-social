@@ -17,16 +17,12 @@ public class AppPropertiesHolder {
         makeAvailable(this.appProperties);
     }
 
-    private void makeAvailable(AppProperties properties) {
+    private static void makeAvailable(AppProperties properties) {
         AppPropertiesHolder.properties = properties;
     }
 
-    public AppProperties getAppProperties() {
-        return properties;
-    }
-
-    public AppPropertiesHolder(AppProperties appProperties) {
-        this.appProperties = appProperties;
+    public static AppProperties getAppProperties() {
+        return AppPropertiesHolder.properties;
     }
 
 

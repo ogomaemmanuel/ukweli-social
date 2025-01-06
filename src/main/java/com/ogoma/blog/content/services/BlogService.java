@@ -34,6 +34,7 @@ public class BlogService {
     public void addComment(Long blogId, BlogCommentCreateRequest commentCreateRequest) {
         try {
             // TODO Fetching by id then updating is an ant pattern, you may also reach the column limit in postgres, 1600
+            // use it only in situations, where you want to check entity properties before updating
             BlogEntity blogEntity = this.blogRepository.getReferenceById(blogId);
             BlogCommentsEntity comments = new BlogCommentsEntity();
             comments.setParentId(commentCreateRequest.getParentId());
