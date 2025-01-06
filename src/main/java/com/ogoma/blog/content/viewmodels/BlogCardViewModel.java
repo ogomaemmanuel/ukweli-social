@@ -7,21 +7,24 @@ import java.time.LocalDateTime;
 
 @Getter
 
-public class BlogCardViewModel {
+public  class BlogCardViewModel {
 
     public BlogCardViewModel(BlogEntity blogEntity) {
+        this.id = blogEntity.getId();
+        this.systemGeneratedId = blogEntity.getSystemGeneratedId();
         this.content = blogEntity.getContent();
         this.title = blogEntity.getTitle();
         this.description = blogEntity.getDescription();
         this.createdAt = blogEntity.getCreatedAt();
         this.updatedAt = blogEntity.getUpdatedAt();
-        this.summary= new BlogSummaryViewModel(blogEntity.getStats());
+        this.summary = new BlogSummaryViewModel(blogEntity.getStats());
     }
-
-    private String title;
-    private String description;
-    private String content;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private BlogSummaryViewModel summary;
+    private final String systemGeneratedId;
+    private final Long id;
+    private final String title;
+    private final String description;
+    private final String content;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
+    private final BlogSummaryViewModel summary;
 }

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @SoftDelete
+//@DynamicUpdate
 public class BaseEntity  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

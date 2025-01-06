@@ -23,7 +23,6 @@ public class BlogService {
     }
 
     public BlogEditViewModel createBlog(BlogCreateRequest blogCreateRequest) {
-
         BlogEntity blog = new BlogEntity();
         blog.setTitle(blogCreateRequest.getTitle());
         blog.setContent(blogCreateRequest.getContent());
@@ -32,16 +31,17 @@ public class BlogService {
     }
 
     public void addComment(Long blogId, BlogCommentCreateRequest commentCreateRequest) {
-        this.blogRepository.findById(blogId).ifPresentOrElse(blogEntity -> {
+        if (this.blogRepository.existsById(blogId)) {
+            // TODO Fetching by id then updating is an ant pattern, you may also reach the column limit in postgres, 1600
+            BlogEntity blogEntity = this.blogRepository.getReferenceById(blogId);
             BlogCommentsEntity comments = new BlogCommentsEntity();
             comments.setParentId(commentCreateRequest.getParentId());
             comments.setComment(commentCreateRequest.getComment());
             blogEntity.addComment(comments);
             this.blogRepository.save(blogEntity);
-
-        }, () -> {
-            throw new RecordNotFoundException("No blog exist with id" + blogId);
-        });
+            return;
+        }
+        throw new RecordNotFoundException("No blog exist with id" + blogId);
     }
 
     public Page<BlogCardViewModel> getBlogs(Pageable pageable) {
