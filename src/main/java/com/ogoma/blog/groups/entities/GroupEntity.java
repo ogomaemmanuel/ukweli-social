@@ -1,5 +1,6 @@
 package com.ogoma.blog.groups.entities;
 
+import com.ogoma.blog.content.entities.BlogEntity;
 import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,6 +32,10 @@ public class GroupEntity extends BaseEntity {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<GroupMemberEntity> members = new HashSet<>();
 
+    @Getter
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<BlogEntity> blogs= new HashSet<>();
+
     public void addMembers(GroupMemberEntity... groupMembers) {
         this.members.addAll(List.of(groupMembers));
         if (groupStats == null) {
@@ -42,12 +47,21 @@ public class GroupEntity extends BaseEntity {
         }
     }
 
+
+    public void addPost(BlogEntity groupPostEntity) {
+        this.blogs.add(groupPostEntity);
+        if (groupStats == null) {
+            this.groupStats = new GroupStatsEntity();
+        }
+        groupStats.incrementPostCount();
+    }
+
     public void addLike(GroupLikeEntity groupLike) {
         groupLike.setGroupEntity(this);
-        if(groupStats!=null) {
-            groupStats.incrementLikeCount();
+        if (groupStats == null) {
+            groupStats = new GroupStatsEntity();
         }
-
+        groupStats.incrementLikeCount();
     }
 
 }

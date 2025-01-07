@@ -1,12 +1,12 @@
 package com.ogoma.blog.groups.services;
 
+import com.ogoma.blog.content.dto.BlogCreateRequest;
+import com.ogoma.blog.content.entities.BlogEntity;
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
 import com.ogoma.blog.groups.entities.*;
 import com.ogoma.blog.groups.repository.GroupRepository;
-import com.ogoma.blog.groups.viewmodels.GroupCardStatisticsViewModel;
 import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;
 import com.ogoma.blog.iam.entities.UserEntity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +50,19 @@ public class GroupService {
         groupLike.setLikedBy(currentUser);
         GroupEntity group = this.groupRepository.getReferenceById(groupId);
         group.addLike(groupLike);
+        this.groupRepository.save(group);
+    }
+
+    @Transactional
+    public void postToGroup(Long groupId, UserEntity currentUser, BlogCreateRequest blogCreateRequest) {
+        BlogEntity blog = new BlogEntity();
+        blog.setContent(blogCreateRequest.getContent());
+        blog.setMedialUrls(blogCreateRequest.getMediaUrls());
+        blog.setTitle(blogCreateRequest.getTitle());
+        blog.setForGroup(true);
+        blog.setVisibility(blogCreateRequest.getVisibility());
+        GroupEntity group = groupRepository.getReferenceById(groupId);
+        group.addPost(blog);
         this.groupRepository.save(group);
     }
 }

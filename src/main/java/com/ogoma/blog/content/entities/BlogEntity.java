@@ -8,8 +8,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -22,6 +25,9 @@ public class BlogEntity extends BaseEntity {
     private String content;
     @Setter
     private PostVisibility visibility;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Setter
+    private Set<String> medialUrls;
     @Setter
     private String description;
     @OneToMany
@@ -33,6 +39,8 @@ public class BlogEntity extends BaseEntity {
     @OneToOne
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     private BlogStatsEntity stats;
+    @Setter
+    private boolean forGroup;
 
     public void addComment(BlogCommentsEntity comment) {
         this.comments.add(comment);

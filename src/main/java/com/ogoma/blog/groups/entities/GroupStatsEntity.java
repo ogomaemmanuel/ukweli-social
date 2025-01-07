@@ -20,5 +20,8 @@ public class GroupStatsEntity {
     public void incrementLikeCount(){
         likeCount++;
     }
+    public void incrementPostCount(){
+        postCount++;
+    }
 
 }

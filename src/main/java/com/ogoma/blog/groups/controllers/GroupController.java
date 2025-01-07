@@ -1,5 +1,6 @@
 package com.ogoma.blog.groups.controllers;
 
+import com.ogoma.blog.content.dto.BlogCreateRequest;
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
 import com.ogoma.blog.groups.services.GroupService;
 import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;
@@ -38,5 +39,13 @@ public class GroupController {
     @GetMapping
     public ResponseEntity<Page<GroupCardViewModel>> getGroups(Pageable pageable) {
         return ResponseEntity.ok(this.groupService.getGroups(pageable));
+    }
+
+    @PostMapping("/{groupId}/posts")
+    public ResponseEntity<Void> postToGroup(@PathVariable Long groupId,
+                                            BlogCreateRequest blogCreateRequest,
+                                            @AuthenticationPrincipal UserEntity currentUser) {
+        this.groupService.postToGroup(groupId, currentUser,blogCreateRequest);
+        return ResponseEntity.ok().build();
     }
 }
