@@ -42,4 +42,12 @@ public class GroupEntity extends BaseEntity {
         }
     }
 
+    public void addLike(GroupLikeEntity groupLike) {
+        groupLike.setGroupEntity(this);
+        if(groupStats!=null) {
+            groupStats.incrementLikeCount();
+        }
+
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.ogoma.blog.groups.services;
 
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
-import com.ogoma.blog.groups.entities.GroupEntity;
-import com.ogoma.blog.groups.entities.GroupEntity_;
-import com.ogoma.blog.groups.entities.GroupMemberEntity;
-import com.ogoma.blog.groups.entities.GroupRole;
+import com.ogoma.blog.groups.entities.*;
 import com.ogoma.blog.groups.repository.GroupRepository;
 import com.ogoma.blog.groups.viewmodels.GroupCardStatisticsViewModel;
 import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;
@@ -45,5 +42,14 @@ public class GroupService {
             root.fetch(GroupEntity_.LAST_MODIFIED_BY, JoinType.LEFT);
             return criteriaBuilder.conjunction();
         }, pageable).map(GroupCardViewModel::new);
+    }
+
+    @Transactional
+    public void likeGroup(Long groupId, UserEntity currentUser) {
+        GroupLikeEntity groupLike = new GroupLikeEntity();
+        groupLike.setLikedBy(currentUser);
+        GroupEntity group = this.groupRepository.getReferenceById(groupId);
+        group.addLike(groupLike);
+        this.groupRepository.save(group);
     }
 }

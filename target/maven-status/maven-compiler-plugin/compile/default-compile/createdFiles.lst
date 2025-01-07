@@ -16,6 +16,7 @@ com/ogoma/blog/content/viewmodels/BlogEditViewModel.class
 com/ogoma/blog/content/controllers/BlogRestController.class
 com/ogoma/blog/content/viewmodels/BlogCardViewModel.class
 com/ogoma/blog/notifications/NotificationEntity_.class
+com/ogoma/blog/setup/DbInitializer.class
 com/ogoma/blog/iam/controllers/UsersController.class
 com/ogoma/blog/iam/viewmodels/UserDetailsCardViewModel.class
 com/ogoma/blog/content/entities/UserProfileStats.class

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @Setter
-@SoftDelete
+//@SoftDelete
 @EntityListeners(AuditingEntityListener.class)
 //@DynamicUpdate
 public class BaseEntity  implements Serializable {
@@ -33,12 +33,12 @@ public class BaseEntity  implements Serializable {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @CreatedBy
     private UserEntity createdBy;
 
     @LastModifiedBy
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     public UserEntity lastModifiedBy;
     @NaturalId
     @UuidGenerator(style = UuidGenerator.Style.TIME)

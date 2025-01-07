@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class GroupStatsEntity {
     private long memberCount;
+    private long likeCount;
     private long postCount;
     private long totalInvitations;
     private long totalPendingInvitations;
@@ -15,6 +16,9 @@ public class GroupStatsEntity {
 
     public void incrementMemberCount(){
         memberCount++;
+    }
+    public void incrementLikeCount(){
+        likeCount++;
     }
 
 }

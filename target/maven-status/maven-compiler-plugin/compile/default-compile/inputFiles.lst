@@ -53,3 +53,4 @@
 /Users/emmanuelogoma/projects/blog/src/main/java/com/ogoma/blog/security/PIIEncryptor.java
 /Users/emmanuelogoma/projects/blog/src/main/java/com/ogoma/blog/setup/BaseEntity.java
 /Users/emmanuelogoma/projects/blog/src/main/java/com/ogoma/blog/setup/BaseRepository.java
+/Users/emmanuelogoma/projects/blog/src/main/java/com/ogoma/blog/setup/DbInitializer.java
