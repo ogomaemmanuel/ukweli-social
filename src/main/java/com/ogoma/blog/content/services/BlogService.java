@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -31,6 +32,8 @@ public class BlogService {
         return new BlogEditViewModel(blog);
     }
 
+
+    @Transactional
     public void addComment(Long blogId, BlogCommentCreateRequest commentCreateRequest) {
         try {
             // TODO Fetching by id then updating is an ant pattern, you may also reach the column limit in postgres, 1600
@@ -47,6 +50,7 @@ public class BlogService {
 
     }
 
+    @Transactional(readOnly = true)
     public Page<BlogCardViewModel> getBlogs(Pageable pageable) {
         return this.blogRepository.findAll(pageable).map(BlogCardViewModel::new);
     }

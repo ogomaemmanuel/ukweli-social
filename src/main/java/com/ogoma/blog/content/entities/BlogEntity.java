@@ -21,6 +21,8 @@ public class BlogEntity extends BaseEntity {
     @Setter
     private String content;
     @Setter
+    private PostVisibility visibility;
+    @Setter
     private String description;
     @OneToMany
     private Set<BlogLike> likes = new HashSet<>();
