@@ -7,7 +7,6 @@ import lombok.Getter;
 
 @Getter
 public class GroupStatsEntity {
-    private Long id;
     private long memberCount;
     private long postCount;
     private long totalInvitations;

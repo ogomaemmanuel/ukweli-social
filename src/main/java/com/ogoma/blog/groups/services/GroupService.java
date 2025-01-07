@@ -5,8 +5,13 @@ import com.ogoma.blog.groups.entities.GroupEntity;
 import com.ogoma.blog.groups.entities.GroupMemberEntity;
 import com.ogoma.blog.groups.entities.GroupRole;
 import com.ogoma.blog.groups.repository.GroupRepository;
+import com.ogoma.blog.groups.viewmodels.GroupCardStatisticsViewModel;
+import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;
 import com.ogoma.blog.iam.entities.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GroupService {
@@ -16,6 +21,8 @@ public class GroupService {
         this.groupRepository = groupRepository;
     }
 
+
+    @Transactional
     public void createGroup(GroupCreateRequestDto createRequestDto, UserEntity userEntity) {
         GroupEntity groupEntity = new GroupEntity();
         groupEntity.setDescription(createRequestDto.getDescription());
@@ -26,5 +33,9 @@ public class GroupService {
         groupMemberEntity.setMembershipRole(GroupRole.ADMIN);
         groupEntity.addMembers(groupMemberEntity);
         this.groupRepository.save(groupEntity);
+    }
+
+    public Page<GroupCardViewModel> getGroups(Pageable pageable){
+       return this.groupRepository.findAll(pageable).map(GroupCardViewModel::new);
     }
 }

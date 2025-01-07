@@ -2,14 +2,14 @@ package com.ogoma.blog.groups.controllers;
 
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
 import com.ogoma.blog.groups.services.GroupService;
+import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;
 import com.ogoma.blog.iam.entities.UserEntity;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/groups")
@@ -25,5 +25,10 @@ public class GroupController {
     public ResponseEntity<String> createGroup(@RequestBody @Valid GroupCreateRequestDto createGroupRequestDto, @AuthenticationPrincipal UserEntity userEntity) {
         this.groupService.createGroup(createGroupRequestDto, userEntity);
         return ResponseEntity.ok("Group created");
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<GroupCardViewModel>> getGroups(Pageable pageable) {
+        return ResponseEntity.ok(this.groupService.getGroups(pageable));
     }
 }
