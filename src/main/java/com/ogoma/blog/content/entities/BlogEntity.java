@@ -25,6 +25,7 @@ public class BlogEntity extends BaseEntity {
     @Setter
     private String description;
     @OneToMany
+    @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     private Set<BlogLike> likes = new HashSet<>();
     @OneToMany
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})

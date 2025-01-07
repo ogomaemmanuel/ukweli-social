@@ -1,5 +1,6 @@
 package com.ogoma.blog.content.services;
 
+import com.ogoma.blog.content.entities.BlogLike;
 import com.ogoma.blog.exceptions.RecordNotFoundException;
 import com.ogoma.blog.content.entities.BlogCommentsEntity;
 import com.ogoma.blog.content.entities.BlogEntity;
@@ -8,7 +9,9 @@ import com.ogoma.blog.content.dto.BlogCreateRequest;
 import com.ogoma.blog.content.repository.BlogRepository;
 import com.ogoma.blog.content.viewmodels.BlogCardViewModel;
 import com.ogoma.blog.content.viewmodels.BlogEditViewModel;
+import com.ogoma.blog.iam.entities.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,16 @@ public class BlogService {
         blog.setContent(blogCreateRequest.getContent());
         this.blogRepository.save(blog);
         return new BlogEditViewModel(blog);
+    }
+
+
+    @Transactional
+    public void likeBlogPost(Long id, UserEntity currentUser) {
+        BlogLike blogLike = new BlogLike();
+        blogLike.setLikedBy(currentUser);
+        BlogEntity blog = this.blogRepository.getReferenceById(id);
+        blog.addLike(blogLike);
+        this.blogRepository.save(blog);
     }
 
 

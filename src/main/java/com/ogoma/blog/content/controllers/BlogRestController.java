@@ -5,11 +5,13 @@ import com.ogoma.blog.content.dto.BlogCreateRequest;
 import com.ogoma.blog.content.services.BlogService;
 import com.ogoma.blog.content.viewmodels.BlogCardViewModel;
 import com.ogoma.blog.content.viewmodels.BlogEditViewModel;
+import com.ogoma.blog.iam.entities.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,9 +31,9 @@ public class BlogRestController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<BlogCardViewModel>> getBlogs(Pageable pageable){
-      Page<BlogCardViewModel> blogs=  this.blogService.getBlogs(pageable);
-      return ResponseEntity.ok(blogs);
+    public ResponseEntity<Page<BlogCardViewModel>> getBlogs(Pageable pageable) {
+        Page<BlogCardViewModel> blogs = this.blogService.getBlogs(pageable);
+        return ResponseEntity.ok(blogs);
     }
 
     @PostMapping("/{blogId}/comments")
@@ -40,6 +42,11 @@ public class BlogRestController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{blogId}/likes")
+    public ResponseEntity<Void> likeBlogPost(@PathVariable Long blogId, @AuthenticationPrincipal UserEntity userEntity) {
+        this.blogService.likeBlogPost(blogId, userEntity);
+        return ResponseEntity.ok().build();
+    }
 
 
 }
