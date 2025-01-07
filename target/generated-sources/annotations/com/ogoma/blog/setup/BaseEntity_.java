@@ -14,6 +14,7 @@ public abstract class BaseEntity_ {
 	public static final String CREATED_AT = "createdAt";
 	public static final String SYSTEM_GENERATED_ID = "systemGeneratedId";
 	public static final String CREATED_BY = "createdBy";
+	public static final String LAST_MODIFIED_BY = "lastModifiedBy";
 	public static final String ID = "id";
 	public static final String VERSION = "version";
 	public static final String UPDATED_AT = "updatedAt";
@@ -33,6 +34,11 @@ public abstract class BaseEntity_ {
 	 * @see com.ogoma.blog.setup.BaseEntity#createdBy
 	 **/
 	public static volatile SingularAttribute<BaseEntity, UserEntity> createdBy;
+	
+	/**
+	 * @see com.ogoma.blog.setup.BaseEntity#lastModifiedBy
+	 **/
+	public static volatile SingularAttribute<BaseEntity, UserEntity> lastModifiedBy;
 	
 	/**
 	 * @see com.ogoma.blog.setup.BaseEntity#id

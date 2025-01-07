@@ -7,11 +7,13 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 
 @StaticMetamodel(UserProfileStats.class)
 @Generated("org.hibernate.processor.HibernateProcessor")
-public abstract class UserProfileStats_ extends com.ogoma.blog.setup.BaseEntity_ {
+public abstract class UserProfileStats_ {
 
 	public static final String ROLE_COUNT = "roleCount";
 	public static final String AVERAGE_RATING = "averageRating";
 	public static final String POST_COUNT = "postCount";
+	public static final String NOTICATION_COUNT = "noticationCount";
+	public static final String ID = "id";
 	public static final String PROFILE_VIEW_COUNT = "profileViewCount";
 	public static final String RATING_COUNT = "ratingCount";
 	public static final String FOLLOWER_COUNT = "followerCount";
@@ -33,6 +35,16 @@ public abstract class UserProfileStats_ extends com.ogoma.blog.setup.BaseEntity_
 	 * @see com.ogoma.blog.content.entities.UserProfileStats#postCount
 	 **/
 	public static volatile SingularAttribute<UserProfileStats, Long> postCount;
+	
+	/**
+	 * @see com.ogoma.blog.content.entities.UserProfileStats#noticationCount
+	 **/
+	public static volatile SingularAttribute<UserProfileStats, Long> noticationCount;
+	
+	/**
+	 * @see com.ogoma.blog.content.entities.UserProfileStats#id
+	 **/
+	public static volatile SingularAttribute<UserProfileStats, Long> id;
 	
 	/**
 	 * @see com.ogoma.blog.content.entities.UserProfileStats#profileViewCount

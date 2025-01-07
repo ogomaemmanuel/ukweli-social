@@ -11,6 +11,7 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 public abstract class BlogEntity_ extends com.ogoma.blog.setup.BaseEntity_ {
 
 	public static final String COMMENTS = "comments";
+	public static final String VISIBILITY = "visibility";
 	public static final String STATS = "stats";
 	public static final String DESCRIPTION = "description";
 	public static final String TITLE = "title";
@@ -22,6 +23,11 @@ public abstract class BlogEntity_ extends com.ogoma.blog.setup.BaseEntity_ {
 	 * @see com.ogoma.blog.content.entities.BlogEntity#comments
 	 **/
 	public static volatile SetAttribute<BlogEntity, BlogCommentsEntity> comments;
+	
+	/**
+	 * @see com.ogoma.blog.content.entities.BlogEntity#visibility
+	 **/
+	public static volatile SingularAttribute<BlogEntity, PostVisibility> visibility;
 	
 	/**
 	 * @see com.ogoma.blog.content.entities.BlogEntity#stats

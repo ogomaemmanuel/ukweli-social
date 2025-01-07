@@ -1,5 +1,6 @@
 package com.ogoma.blog.iam.entities;
 
+import com.ogoma.blog.config.SecurityConfig;
 import com.ogoma.blog.content.entities.BlogEntity;
 import com.ogoma.blog.content.entities.UserProfileStats;
 import com.ogoma.blog.content.entities.FollowerEntity;
@@ -52,7 +53,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
 //    Set<BlogEntity>
 
 
-
     public void addFollower(FollowerEntity follower) {
         UserEntity otherUser = follower.getFollower();
         otherUser.incrementFollowing();
@@ -62,7 +62,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
         }
     }
 
-    public void addNotication(NotificationEntity notificationEntity) {
+    public void addNotification(NotificationEntity notificationEntity) {
         this.notifications.add(notificationEntity);
         if (profileStats != null) {
             profileStats.incrementNoticationCount();
@@ -127,5 +127,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.password = SecurityConfig.passwordEncoder().encode(password);
     }
 }

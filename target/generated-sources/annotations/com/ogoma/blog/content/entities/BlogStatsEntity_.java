@@ -7,10 +7,11 @@ import jakarta.persistence.metamodel.StaticMetamodel;
 
 @StaticMetamodel(BlogStatsEntity.class)
 @Generated("org.hibernate.processor.HibernateProcessor")
-public abstract class BlogStatsEntity_ extends com.ogoma.blog.setup.BaseEntity_ {
+public abstract class BlogStatsEntity_ {
 
 	public static final String SHARE_COUNT = "shareCount";
 	public static final String LIKE_COUNT = "likeCount";
+	public static final String ID = "id";
 	public static final String COMMENT_COUNT = "commentCount";
 
 	
@@ -23,6 +24,11 @@ public abstract class BlogStatsEntity_ extends com.ogoma.blog.setup.BaseEntity_ 
 	 * @see com.ogoma.blog.content.entities.BlogStatsEntity#likeCount
 	 **/
 	public static volatile SingularAttribute<BlogStatsEntity, Long> likeCount;
+	
+	/**
+	 * @see com.ogoma.blog.content.entities.BlogStatsEntity#id
+	 **/
+	public static volatile SingularAttribute<BlogStatsEntity, Long> id;
 	
 	/**
 	 * @see com.ogoma.blog.content.entities.BlogStatsEntity
