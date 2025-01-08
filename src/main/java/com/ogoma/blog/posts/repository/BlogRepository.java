@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BlogRepository extends BaseRepository<PostEntity> {
 
-    @Query( value = " SELECT EXISTS(Select 1 blogs_comments WHERE blog_id = :postId AND comment_id = :commentId)",nativeQuery = true)
+    @Query( value = "SELECT EXISTS(Select count(pc.id) from PostCommentsEntity pc WHERE pc.blog.id = :postId AND pc.id = :commentId)")
     boolean existsByBlogIdAndCommentId(Long postId, Long commentId);
+
+
+    @Query(value = "SELECT pe from PostEntity pe left join fetch pe.comments pc where pe.id =:blogId and pc.id=:commentId")
+    PostEntity findByBlogIdAndCommentId(Long blogId, Long commentId);
 }

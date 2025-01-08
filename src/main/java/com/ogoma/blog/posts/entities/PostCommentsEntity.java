@@ -20,7 +20,8 @@ public class PostCommentsEntity extends BaseEntity {
     private Long parentId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blog_id")
-    private PostEntity blogEntity;
+    private PostEntity blog;
+
 
     @Override
     public boolean equals(Object o) {

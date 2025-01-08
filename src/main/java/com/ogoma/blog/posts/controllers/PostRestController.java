@@ -60,7 +60,7 @@ public class PostRestController {
 
     @PostMapping("/{blogId}/unlike")
     public ResponseEntity<Void> updateBlogLike(@PathVariable Long blogId, @AuthenticationPrincipal UserEntity userEntity) {
-        this.blogService.likeBlogPost(blogId, userEntity);
+        this.blogService.unlikeBlogPost(blogId, userEntity);
         return ResponseEntity.ok().build();
     }
 

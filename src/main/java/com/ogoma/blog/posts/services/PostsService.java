@@ -1,5 +1,6 @@
 package com.ogoma.blog.posts.services;
 
+import com.ogoma.blog.exceptions.RecordNotFoundException;
 import com.ogoma.blog.posts.entities.PostEntity;
 import com.ogoma.blog.posts.entities.PostLikeEntity;
 import com.ogoma.blog.posts.entities.PostCommentsEntity;
@@ -9,6 +10,8 @@ import com.ogoma.blog.posts.repository.BlogRepository;
 import com.ogoma.blog.posts.viewmodels.BlogCardViewModel;
 import com.ogoma.blog.posts.viewmodels.BlogEditViewModel;
 import com.ogoma.blog.iam.entities.UserEntity;
+import jakarta.persistence.EntityManager;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,9 +21,11 @@ import java.time.LocalDateTime;
 
 @Service
 public class PostsService {
+    private final EntityManager entityManager;
     private final BlogRepository blogRepository;
 
-    public PostsService(BlogRepository blogRepository) {
+    public PostsService(EntityManager entityManager, BlogRepository blogRepository) {
+        this.entityManager = entityManager;
         this.blogRepository = blogRepository;
     }
 
@@ -71,17 +76,15 @@ public class PostsService {
 
 
     @Transactional
-    public void deleteComment(Long blogId, Long commentId, UserEntity currentUser) {
-        if (this.blogRepository.existsByBlogIdAndCommentId(blogId, commentId)) {
-            PostEntity blogEntity = this.blogRepository.getReferenceById(blogId);
-            PostCommentsEntity comment = new PostCommentsEntity();
-            comment.setCreatedAt(LocalDateTime.now());
-            comment.setUpdatedAt(LocalDateTime.now());
-            comment.setLastModifiedBy(currentUser);
-            comment.setCreatedBy(currentUser);
-            comment.setId(commentId);
-            blogEntity.removeComment(comment);
-            this.blogRepository.save(blogEntity);
-        }
+    public void deleteComment(Long postId, Long commentId, UserEntity currentUser) {
+        PostEntity post = this.blogRepository.findByBlogIdAndCommentId(postId, commentId);
+        post.getComments().size();
+        post.removeComment(post.getComments().getFirst());
+        blogRepository.save(post);
+
+
+    }
+
+    public void unlikeBlogPost(Long blogId, UserEntity userEntity) {
     }
 }

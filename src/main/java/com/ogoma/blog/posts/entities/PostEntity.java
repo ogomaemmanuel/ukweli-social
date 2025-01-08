@@ -7,6 +7,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -37,9 +38,9 @@ public class PostEntity extends BaseEntity {
     @OneToMany
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     private List<PostLikeEntity> likes = new ArrayList<>();
-    @OneToMany(orphanRemoval = true, mappedBy = "blogEntity")
+    @OneToMany(orphanRemoval = true, mappedBy = "blog")
     @Cascade({CascadeType.MERGE,
-
+            CascadeType.REMOVE,
             CascadeType.PERSIST})
     private List<PostCommentsEntity> comments = new ArrayList<>();
     @OneToOne
@@ -55,8 +56,9 @@ public class PostEntity extends BaseEntity {
         if (this.comments == null) {
             this.comments = new ArrayList<>();
         }
+        // Initialize the collection explicitly
         this.comments.add(comment);
-        comment.setBlogEntity(this);
+        comment.setBlog(this);
         if (this.stats == null) {
             stats = new PostStatsEntity();
         }
@@ -64,11 +66,16 @@ public class PostEntity extends BaseEntity {
     }
 
     public void removeComment(PostCommentsEntity comment) {
-        this.comments.remove(comment);
-        comment.setBlogEntity(null);
-        if (this.stats != null) {
-            stats.decrementCommentCount();
+        if (this.comments == null) {
+            comments = new ArrayList<>();
         }
+        if (this.stats == null) {
+            stats = new PostStatsEntity();
+        }
+        comments.remove(comment);
+        comment.setBlog(null);
+        stats.decrementCommentCount();
+
     }
 
     public void addLike(PostLikeEntity like) {
