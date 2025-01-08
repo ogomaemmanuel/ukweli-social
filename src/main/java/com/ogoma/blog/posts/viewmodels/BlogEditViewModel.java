@@ -1,9 +1,7 @@
-package com.ogoma.blog.content.viewmodels;
+package com.ogoma.blog.posts.viewmodels;
 
-import com.ogoma.blog.content.entities.BlogEntity;
-import lombok.AllArgsConstructor;
+import com.ogoma.blog.posts.entities.PostEntity;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +13,7 @@ public class BlogEditViewModel {
     private String systemGeneratedId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    public BlogEditViewModel(BlogEntity blogEntity) {
+    public BlogEditViewModel(PostEntity blogEntity) {
         if(blogEntity!=null){
             this.id = blogEntity.getId();
             this.title= blogEntity.getTitle();

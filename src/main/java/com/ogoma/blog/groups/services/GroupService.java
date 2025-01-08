@@ -1,7 +1,7 @@
 package com.ogoma.blog.groups.services;
 
-import com.ogoma.blog.content.dto.BlogCreateRequest;
-import com.ogoma.blog.content.entities.BlogEntity;
+import com.ogoma.blog.posts.dto.BlogCreateRequest;
+import com.ogoma.blog.posts.entities.PostEntity;
 import com.ogoma.blog.exceptions.RecordNotFoundException;
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
 import com.ogoma.blog.groups.entities.*;
@@ -57,7 +57,7 @@ public class GroupService {
 
     @Transactional
     public void postToGroup(Long groupId, UserEntity currentUser, BlogCreateRequest blogCreateRequest) {
-        BlogEntity blog = new BlogEntity();
+        PostEntity blog = new PostEntity();
         blog.setContent(blogCreateRequest.getContent());
         blog.setMedialUrls(blogCreateRequest.getMediaUrls());
         blog.setTitle(blogCreateRequest.getTitle());

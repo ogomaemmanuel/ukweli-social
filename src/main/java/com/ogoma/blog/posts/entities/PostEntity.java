@@ -1,4 +1,4 @@
-package com.ogoma.blog.content.entities;
+package com.ogoma.blog.posts.entities;
 
 import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.Entity;
@@ -12,15 +12,15 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 
 @Getter
 @Entity
-@Table(name = "blogs")
-public class BlogEntity extends BaseEntity {
+@Table(name = "posts")
+public class PostEntity extends BaseEntity {
     @Setter
     private String title;
     @Setter
@@ -32,42 +32,54 @@ public class BlogEntity extends BaseEntity {
     private Set<String> medialUrls;
     @Setter
     private String description;
+    //https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying
+    // lazy load to many relations to avoid cartesian explosion when loading related entities
     @OneToMany
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<BlogLike> likes = new HashSet<>();
-    @OneToMany(orphanRemoval = true)
-    @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<BlogCommentsEntity> comments = new HashSet<>();
+    private List<PostLikeEntity> likes = new ArrayList<>();
+    @OneToMany(orphanRemoval = true, mappedBy = "blogEntity")
+    @Cascade({CascadeType.MERGE,
+
+            CascadeType.PERSIST})
+    private List<PostCommentsEntity> comments = new ArrayList<>();
     @OneToOne
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
-    private BlogStatsEntity stats;
+    private PostStatsEntity stats;
     @Setter
     private boolean forGroup;
 
-    public void addComment(BlogCommentsEntity comment) {
+    public void addComment(PostCommentsEntity comment) {
+        //if the comments are a set, this will lead to a call to the db fetching all the records
+        // https://vladmihalcea.com/set-bidirectional-onetomany/
+
+        if (this.comments == null) {
+            this.comments = new ArrayList<>();
+        }
         this.comments.add(comment);
+        comment.setBlogEntity(this);
         if (this.stats == null) {
-            stats = new BlogStatsEntity();
+            stats = new PostStatsEntity();
         }
         stats.incrementCommentCount();
     }
 
-    public void removeComment(BlogCommentsEntity comment) {
+    public void removeComment(PostCommentsEntity comment) {
         this.comments.remove(comment);
+        comment.setBlogEntity(null);
         if (this.stats != null) {
             stats.decrementCommentCount();
         }
     }
 
-    public void addLike(BlogLike like) {
+    public void addLike(PostLikeEntity like) {
         likes.add(like);
         if (this.stats == null) {
-            stats = new BlogStatsEntity();
+            stats = new PostStatsEntity();
         }
         stats.incrementLikeCount();
     }
 
-    public void removeLike(BlogLike like) {
+    public void removeLike(PostLikeEntity like) {
         likes.remove(like);
         if (this.stats != null) {
             stats.decrementLikeCount();

@@ -1,6 +1,6 @@
 package com.ogoma.blog.groups.controllers;
 
-import com.ogoma.blog.content.dto.BlogCreateRequest;
+import com.ogoma.blog.posts.dto.BlogCreateRequest;
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
 import com.ogoma.blog.groups.services.GroupService;
 import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;

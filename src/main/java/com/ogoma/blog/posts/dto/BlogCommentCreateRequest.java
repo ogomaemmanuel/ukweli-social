@@ -1,4 +1,4 @@
-package com.ogoma.blog.content.dto;
+package com.ogoma.blog.posts.dto;
 
 import lombok.Getter;
 import lombok.Setter;

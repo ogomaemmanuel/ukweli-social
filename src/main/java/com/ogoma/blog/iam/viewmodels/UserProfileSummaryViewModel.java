@@ -1,6 +1,6 @@
 package com.ogoma.blog.iam.viewmodels;
 
-import com.ogoma.blog.content.entities.UserProfileStats;
+import com.ogoma.blog.posts.entities.UserProfileStats;
 import lombok.Getter;
 
 

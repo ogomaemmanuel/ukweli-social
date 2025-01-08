@@ -1,6 +1,6 @@
-package com.ogoma.blog.content.viewmodels;
+package com.ogoma.blog.posts.viewmodels;
 
-import com.ogoma.blog.content.entities.BlogEntity;
+import com.ogoma.blog.posts.entities.PostEntity;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public  class BlogCardViewModel {
 
-    public BlogCardViewModel(BlogEntity blogEntity) {
+    public BlogCardViewModel(PostEntity blogEntity) {
         this.id = blogEntity.getId();
         this.systemGeneratedId = blogEntity.getSystemGeneratedId();
         this.content = blogEntity.getContent();

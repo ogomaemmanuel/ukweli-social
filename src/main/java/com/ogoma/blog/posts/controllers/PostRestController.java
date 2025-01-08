@@ -1,10 +1,10 @@
-package com.ogoma.blog.content.controllers;
+package com.ogoma.blog.posts.controllers;
 
-import com.ogoma.blog.content.dto.BlogCommentCreateRequest;
-import com.ogoma.blog.content.dto.BlogCreateRequest;
-import com.ogoma.blog.content.services.BlogService;
-import com.ogoma.blog.content.viewmodels.BlogCardViewModel;
-import com.ogoma.blog.content.viewmodels.BlogEditViewModel;
+import com.ogoma.blog.posts.dto.BlogCommentCreateRequest;
+import com.ogoma.blog.posts.dto.BlogCreateRequest;
+import com.ogoma.blog.posts.services.PostsService;
+import com.ogoma.blog.posts.viewmodels.BlogCardViewModel;
+import com.ogoma.blog.posts.viewmodels.BlogEditViewModel;
 import com.ogoma.blog.iam.entities.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/blogs")
 @PreAuthorize("isFullyAuthenticated()")
-public class BlogRestController {
+public class PostRestController {
 
-    private final BlogService blogService;
+    private final PostsService blogService;
 
-    public BlogRestController(BlogService blogService) {
+    public PostRestController(PostsService blogService) {
         this.blogService = blogService;
     }
 
@@ -37,8 +37,10 @@ public class BlogRestController {
     }
 
     @PostMapping("/{blogId}/comments")
-    public ResponseEntity<Void> addComment(@PathVariable Long blogId, @RequestBody @Valid BlogCommentCreateRequest commentCreateRequest) {
-        this.blogService.addComment(blogId, commentCreateRequest);
+    public ResponseEntity<Void> addComment(@PathVariable Long blogId,
+                                           @RequestBody @Valid BlogCommentCreateRequest commentCreateRequest,
+                                           @AuthenticationPrincipal UserEntity currentUser) {
+        this.blogService.addComment(blogId, commentCreateRequest, currentUser);
         return ResponseEntity.ok().build();
     }
 
@@ -52,6 +54,12 @@ public class BlogRestController {
 
     @PostMapping("/{blogId}/likes")
     public ResponseEntity<Void> likeBlogPost(@PathVariable Long blogId, @AuthenticationPrincipal UserEntity userEntity) {
+        this.blogService.likeBlogPost(blogId, userEntity);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{blogId}/unlike")
+    public ResponseEntity<Void> updateBlogLike(@PathVariable Long blogId, @AuthenticationPrincipal UserEntity userEntity) {
         this.blogService.likeBlogPost(blogId, userEntity);
         return ResponseEntity.ok().build();
     }

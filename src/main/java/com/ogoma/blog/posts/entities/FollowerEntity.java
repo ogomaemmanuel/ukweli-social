@@ -1,4 +1,4 @@
-package com.ogoma.blog.content.entities;
+package com.ogoma.blog.posts.entities;
 
 import com.ogoma.blog.iam.entities.UserEntity;
 import com.ogoma.blog.setup.BaseEntity;

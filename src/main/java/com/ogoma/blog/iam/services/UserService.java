@@ -1,7 +1,7 @@
 package com.ogoma.blog.iam.services;
 
 
-import com.ogoma.blog.content.entities.FollowerEntity;
+import com.ogoma.blog.posts.entities.FollowerEntity;
 import com.ogoma.blog.exceptions.RecordNotFoundException;
 import com.ogoma.blog.iam.entities.UserEntity;
 import com.ogoma.blog.iam.repositories.UserRepository;

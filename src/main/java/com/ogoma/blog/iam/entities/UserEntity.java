@@ -1,9 +1,9 @@
 package com.ogoma.blog.iam.entities;
 
 import com.ogoma.blog.config.SecurityConfig;
-import com.ogoma.blog.content.entities.BlogEntity;
-import com.ogoma.blog.content.entities.UserProfileStats;
-import com.ogoma.blog.content.entities.FollowerEntity;
+import com.ogoma.blog.posts.entities.PostEntity;
+import com.ogoma.blog.posts.entities.UserProfileStats;
+import com.ogoma.blog.posts.entities.FollowerEntity;
 import com.ogoma.blog.notifications.NotificationEntity;
 import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.*;
@@ -46,10 +46,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     Set<NotificationEntity> notifications = new HashSet<>();
 
     @OneToMany
-    Set<BlogEntity> blogsCreated = new HashSet<>();
+    Set<PostEntity> blogsCreated = new HashSet<>();
 
     @ManyToMany
-    Set<BlogEntity> likedBlogs = new HashSet<>();
+    Set<PostEntity> likedBlogs = new HashSet<>();
 
 //    Set<BlogEntity>
 

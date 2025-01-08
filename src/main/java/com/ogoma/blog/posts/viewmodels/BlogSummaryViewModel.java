@@ -1,6 +1,6 @@
-package com.ogoma.blog.content.viewmodels;
+package com.ogoma.blog.posts.viewmodels;
 
-import com.ogoma.blog.content.entities.BlogStatsEntity;
+import com.ogoma.blog.posts.entities.PostStatsEntity;
 import lombok.Getter;
 
 @Getter
@@ -9,7 +9,7 @@ public class BlogSummaryViewModel {
     private long likeCount;
     private long shareCount;
 
-    public BlogSummaryViewModel(BlogStatsEntity stats) {
+    public BlogSummaryViewModel(PostStatsEntity stats) {
         if (stats != null) {
             this.commentCount = stats.getCommentCount();
             this.likeCount = stats.getLikeCount();

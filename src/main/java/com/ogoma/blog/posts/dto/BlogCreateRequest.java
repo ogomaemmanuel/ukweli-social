@@ -1,10 +1,9 @@
-package com.ogoma.blog.content.dto;
+package com.ogoma.blog.posts.dto;
 
-import com.ogoma.blog.content.entities.PostVisibility;
+import com.ogoma.blog.posts.entities.PostVisibility;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter
