@@ -1,12 +1,9 @@
 package com.ogoma.blog.groups.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Getter;
 
 @Getter
-public class GroupStatsEntity {
+public class GroupStats {
     private long memberCount;
     private long likeCount;
     private long postCount;
@@ -14,14 +11,20 @@ public class GroupStatsEntity {
     private long totalPendingInvitations;
     private long totalJoinRequests;
 
-    public void incrementMemberCount(){
+    public void incrementMemberCount() {
         memberCount++;
     }
-    public void incrementLikeCount(){
+
+    public void incrementLikeCount() {
         likeCount++;
     }
-    public void incrementPostCount(){
+
+    public void incrementPostCount() {
         postCount++;
+    }
+
+    public void incrementTotalJoinRequests() {
+        totalJoinRequests++;
     }
 
 }

@@ -2,11 +2,13 @@ package com.ogoma.blog.groups.services;
 
 import com.ogoma.blog.content.dto.BlogCreateRequest;
 import com.ogoma.blog.content.entities.BlogEntity;
+import com.ogoma.blog.exceptions.RecordNotFoundException;
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
 import com.ogoma.blog.groups.entities.*;
 import com.ogoma.blog.groups.repository.GroupRepository;
 import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;
 import com.ogoma.blog.iam.entities.UserEntity;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,5 +66,19 @@ public class GroupService {
         GroupEntity group = groupRepository.getReferenceById(groupId);
         group.addPost(blog);
         this.groupRepository.save(group);
+    }
+
+    @Transactional
+    public void addJoinRequest(Long groupId, UserEntity currentUser) {
+        try {
+            GroupEntity group = this.groupRepository.getReferenceById(groupId);
+            GroupJoinRequestEntity joinRequestEntity = new GroupJoinRequestEntity();
+            joinRequestEntity.setRequestBy(currentUser);
+            group.addJoinRequest(joinRequestEntity);
+            this.groupRepository.save(group);
+        }catch (EntityNotFoundException entityNotFoundException){
+            throw  new RecordNotFoundException("No  group with id %d".formatted(groupId));
+        }
+        // group.
     }
 }

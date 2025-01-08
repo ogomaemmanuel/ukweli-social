@@ -1,12 +1,12 @@
 package com.ogoma.blog.groups.viewmodels;
 
-import com.ogoma.blog.groups.entities.GroupStatsEntity;
+import com.ogoma.blog.groups.entities.GroupStats;
 import lombok.Getter;
 
 @Getter
 public class GroupCardStatisticsViewModel {
 
-    public GroupCardStatisticsViewModel(GroupStatsEntity groupStats) {
+    public GroupCardStatisticsViewModel(GroupStats groupStats) {
        this.memberCount= groupStats.getMemberCount();
        this.postCount= groupStats.getPostCount();
        this.totalInvitations= groupStats.getTotalInvitations();

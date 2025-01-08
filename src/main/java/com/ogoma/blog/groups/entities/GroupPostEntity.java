@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Table(name="group_posts")
 public class GroupPostEntity {
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

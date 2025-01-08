@@ -29,7 +29,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-        security.csrf(csrf -> csrf.disable())
+        security.csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults());
         return security.build();
     }

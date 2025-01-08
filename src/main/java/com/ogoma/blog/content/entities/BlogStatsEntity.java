@@ -1,15 +1,13 @@
 package com.ogoma.blog.content.entities;
 
 import com.ogoma.blog.setup.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Entity
+@Table(name = "blog_stats")
 public class BlogStatsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

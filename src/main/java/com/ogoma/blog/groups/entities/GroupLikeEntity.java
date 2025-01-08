@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Table(name = "group_likes")
 public class GroupLikeEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

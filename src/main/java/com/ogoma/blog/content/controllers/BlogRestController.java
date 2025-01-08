@@ -42,6 +42,14 @@ public class BlogRestController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/{blogId}/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long blogId,
+                                              @PathVariable Long commentId,
+                                              @AuthenticationPrincipal UserEntity currentUser) {
+        this.blogService.deleteComment(blogId, commentId, currentUser);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/{blogId}/likes")
     public ResponseEntity<Void> likeBlogPost(@PathVariable Long blogId, @AuthenticationPrincipal UserEntity userEntity) {
         this.blogService.likeBlogPost(blogId, userEntity);

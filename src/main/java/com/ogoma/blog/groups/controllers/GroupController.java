@@ -45,7 +45,14 @@ public class GroupController {
     public ResponseEntity<Void> postToGroup(@PathVariable Long groupId,
                                             BlogCreateRequest blogCreateRequest,
                                             @AuthenticationPrincipal UserEntity currentUser) {
-        this.groupService.postToGroup(groupId, currentUser,blogCreateRequest);
+        this.groupService.postToGroup(groupId, currentUser, blogCreateRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{groupId}/join-requests")
+    public ResponseEntity<Void> requestToJoinGroup(@PathVariable Long groupId,
+                                                   @AuthenticationPrincipal UserEntity userEntity) {
+        this.groupService.addJoinRequest(groupId, userEntity);
         return ResponseEntity.ok().build();
     }
 }

@@ -67,4 +67,14 @@ public class BlogService {
     public Page<BlogCardViewModel> getBlogs(Pageable pageable) {
         return this.blogRepository.findAll(pageable).map(BlogCardViewModel::new);
     }
+
+
+    @Transactional
+    public void deleteComment(Long blogId, Long commentId, UserEntity currentUser) {
+        BlogEntity blogEntity = this.blogRepository.getReferenceById(blogId);
+        BlogCommentsEntity comment = new BlogCommentsEntity();
+        comment.setId(commentId);
+        blogEntity.removeComment(comment);
+        this.blogRepository.save(blogEntity);
+    }
 }

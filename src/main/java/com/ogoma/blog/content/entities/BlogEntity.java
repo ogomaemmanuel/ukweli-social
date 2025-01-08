@@ -4,6 +4,7 @@ import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
@@ -18,6 +19,7 @@ import java.util.Set;
 
 @Getter
 @Entity
+@Table(name = "blogs")
 public class BlogEntity extends BaseEntity {
     @Setter
     private String title;
@@ -33,7 +35,7 @@ public class BlogEntity extends BaseEntity {
     @OneToMany
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     private Set<BlogLike> likes = new HashSet<>();
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     private Set<BlogCommentsEntity> comments = new HashSet<>();
     @OneToOne
