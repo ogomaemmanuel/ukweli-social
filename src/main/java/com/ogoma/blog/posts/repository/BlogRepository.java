@@ -14,6 +14,6 @@ public interface BlogRepository extends BaseRepository<PostEntity> {
     boolean existsByBlogIdAndCommentId(Long postId, Long commentId);
 
 
-    @Query(value = "SELECT pe from PostEntity pe left join fetch pe.comments pc where pe.id =:blogId and pc.id=:commentId")
+    @Query(value = "SELECT pe from PostEntity pe inner join fetch pe.comments pc where pe.id =:blogId and pc.id=:commentId")
    Optional<PostEntity> findByBlogIdAndCommentId(Long blogId, Long commentId);
 }
