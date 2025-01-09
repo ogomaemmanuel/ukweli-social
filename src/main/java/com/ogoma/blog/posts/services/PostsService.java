@@ -21,11 +21,10 @@ import java.time.LocalDateTime;
 
 @Service
 public class PostsService {
-    private final EntityManager entityManager;
+
     private final BlogRepository blogRepository;
 
-    public PostsService(EntityManager entityManager, BlogRepository blogRepository) {
-        this.entityManager = entityManager;
+    public PostsService( BlogRepository blogRepository) {
         this.blogRepository = blogRepository;
     }
 
@@ -77,12 +76,13 @@ public class PostsService {
 
     @Transactional
     public void deleteComment(Long postId, Long commentId, UserEntity currentUser) {
-        PostEntity post = this.blogRepository.findByBlogIdAndCommentId(postId, commentId);
-        post.getComments().size();
-        post.removeComment(post.getComments().getFirst());
-        blogRepository.save(post);
-
-
+        this.blogRepository.findByBlogIdAndCommentId(postId, commentId)
+                .ifPresentOrElse(postEntity -> {
+                    postEntity.removeComment(postEntity.getComments().getFirst());
+                    blogRepository.save(postEntity);
+                }, () -> {
+                    throw new RecordNotFoundException("No comment found");
+                });
     }
 
     public void unlikeBlogPost(Long blogId, UserEntity userEntity) {

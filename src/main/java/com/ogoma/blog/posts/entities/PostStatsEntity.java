@@ -3,10 +3,12 @@ package com.ogoma.blog.posts.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
 @Entity
 @Table(name = "blog_stats")
-public class PostStatsEntity {
+public class PostStatsEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

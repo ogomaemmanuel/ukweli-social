@@ -1,13 +1,9 @@
 package com.ogoma.blog.posts.entities;
 
 import com.ogoma.blog.setup.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -46,6 +42,8 @@ public class PostEntity extends BaseEntity {
     @OneToOne
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     private PostStatsEntity stats;
+    @Enumerated(EnumType.STRING)
+    private PostPublicationStatus status= PostPublicationStatus.DRAFT;
     @Setter
     private boolean forGroup;
 

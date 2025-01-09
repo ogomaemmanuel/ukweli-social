@@ -5,6 +5,8 @@ import com.ogoma.blog.setup.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface BlogRepository extends BaseRepository<PostEntity> {
 
@@ -13,5 +15,5 @@ public interface BlogRepository extends BaseRepository<PostEntity> {
 
 
     @Query(value = "SELECT pe from PostEntity pe left join fetch pe.comments pc where pe.id =:blogId and pc.id=:commentId")
-    PostEntity findByBlogIdAndCommentId(Long blogId, Long commentId);
+   Optional<PostEntity> findByBlogIdAndCommentId(Long blogId, Long commentId);
 }
