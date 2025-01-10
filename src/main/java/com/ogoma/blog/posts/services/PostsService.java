@@ -24,7 +24,7 @@ public class PostsService {
 
     private final BlogRepository blogRepository;
 
-    public PostsService( BlogRepository blogRepository) {
+    public PostsService(BlogRepository blogRepository) {
         this.blogRepository = blogRepository;
     }
 
@@ -39,12 +39,8 @@ public class PostsService {
 
     @Transactional
     public void likeBlogPost(Long id, UserEntity currentUser) {
-        PostLikeEntity blogLike = new PostLikeEntity();
-        blogLike.setCreatedAt(LocalDateTime.now());
-        blogLike.setUpdatedAt(LocalDateTime.now());
-        blogLike.setLikedBy(currentUser);
         PostEntity blog = this.blogRepository.getReferenceById(id);
-        blog.addLike(blogLike);
+        blog.addLike(currentUser);
         this.blogRepository.save(blog);
     }
 

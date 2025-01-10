@@ -1,5 +1,6 @@
 package com.ogoma.blog.posts.entities;
 
+import com.ogoma.blog.iam.entities.UserEntity;
 import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +33,7 @@ public class PostEntity extends BaseEntity {
     private String description;
     //https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying
     // lazy load to many relations to avoid cartesian explosion when loading related entities
-    @OneToMany
+    @OneToMany(mappedBy = "blog")
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     private List<PostLikeEntity> likes = new ArrayList<>();
     @OneToMany(orphanRemoval = true, mappedBy = "blog")
@@ -43,7 +45,7 @@ public class PostEntity extends BaseEntity {
     @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     private PostStatsEntity stats;
     @Enumerated(EnumType.STRING)
-    private PostPublicationStatus status= PostPublicationStatus.DRAFT;
+    private PostPublicationStatus status = PostPublicationStatus.DRAFT;
     @Setter
     private boolean forGroup;
 
@@ -76,8 +78,13 @@ public class PostEntity extends BaseEntity {
 
     }
 
-    public void addLike(PostLikeEntity like) {
-        likes.add(like);
+    public void addLike(UserEntity user) {
+        PostLikeEntity blogLike = new PostLikeEntity();
+        blogLike.setCreatedAt(LocalDateTime.now());
+        blogLike.setUpdatedAt(LocalDateTime.now());
+        blogLike.setLikedBy(user);
+        blogLike.setBlog(this);
+        likes.add(blogLike);
         if (this.stats == null) {
             stats = new PostStatsEntity();
         }

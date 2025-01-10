@@ -30,11 +30,11 @@ public class UserService {
 
     @Transactional
     public void followUser(Long userIdToFollow, UserEntity currentUser) {
-        UserEntity follower = this.userRepository.findById(currentUser.getId()).get();
-        UserEntity followedUser = this.userRepository.getReferenceById(userIdToFollow);
-        followedUser.addFollower(follower);
-        this.userRepository.saveAll(List.of(followedUser, follower));
-
+        this.userRepository.findById(currentUser.getId()).ifPresent(follower -> {
+            UserEntity followedUser = this.userRepository.getReferenceById(userIdToFollow);
+            followedUser.addFollower(follower);
+            this.userRepository.saveAll(List.of(followedUser));
+        });
     }
 
     public void unfollowUser(Long userIdToFollow, UserEntity currentUser) {
