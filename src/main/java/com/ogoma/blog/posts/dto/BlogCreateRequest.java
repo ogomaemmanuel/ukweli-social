@@ -1,5 +1,6 @@
 package com.ogoma.blog.posts.dto;
 
+import com.ogoma.blog.posts.entities.PostPublicationStatus;
 import com.ogoma.blog.posts.entities.PostVisibility;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +14,6 @@ public class BlogCreateRequest {
     private String content;
     private Set<String> mediaUrls;
     public PostVisibility visibility;
+    public PostPublicationStatus publicationStatus;
 
 }

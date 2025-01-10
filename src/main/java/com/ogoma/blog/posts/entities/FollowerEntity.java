@@ -2,9 +2,7 @@ package com.ogoma.blog.posts.entities;
 
 import com.ogoma.blog.iam.entities.UserEntity;
 import com.ogoma.blog.setup.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +10,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "followers")
-public class FollowerEntity extends BaseEntity {
+public class FollowerEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     @ManyToOne
+    private UserEntity user;
+
+
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private UserEntity follower;
 }

@@ -1,12 +1,17 @@
 package com.ogoma.blog.iam.services;
 
 
-import com.ogoma.blog.posts.entities.FollowerEntity;
+import com.ogoma.blog.iam.viewmodels.UserCardViewModel;
 import com.ogoma.blog.exceptions.RecordNotFoundException;
 import com.ogoma.blog.iam.entities.UserEntity;
 import com.ogoma.blog.iam.repositories.UserRepository;
 import com.ogoma.blog.iam.viewmodels.UserProfileDetailsViewModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -22,20 +27,24 @@ public class UserService {
         return this.userRepository.findById(userId).map(UserProfileDetailsViewModel::new).orElseThrow(() -> new RecordNotFoundException("User not found with id " + userId));
     }
 
+
+    @Transactional
     public void followUser(Long userIdToFollow, UserEntity currentUser) {
-        FollowerEntity followerEntity = new FollowerEntity();
-        followerEntity.setFollower(currentUser);
+        UserEntity follower = this.userRepository.findById(currentUser.getId()).get();
         UserEntity followedUser = this.userRepository.getReferenceById(userIdToFollow);
-        followedUser.addFollower(followerEntity);
-        this.userRepository.save(followedUser);
+        followedUser.addFollower(follower);
+        this.userRepository.saveAll(List.of(followedUser, follower));
+
     }
 
     public void unfollowUser(Long userIdToFollow, UserEntity currentUser) {
-        FollowerEntity followerEntity = new FollowerEntity();
-        followerEntity.setFollower(currentUser);
+        UserEntity followerEntity = new UserEntity();
         UserEntity followedUser = this.userRepository.getReferenceById(userIdToFollow);
         followedUser.removeFollower(followerEntity);
         this.userRepository.save(followedUser);
     }
 
+    public Page<UserCardViewModel> getUsers(Pageable pageable) {
+        return this.userRepository.findAll(pageable).map(UserCardViewModel::new);
+    }
 }

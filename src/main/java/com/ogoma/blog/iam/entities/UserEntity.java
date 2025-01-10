@@ -1,9 +1,9 @@
 package com.ogoma.blog.iam.entities;
 
 import com.ogoma.blog.config.SecurityConfig;
+import com.ogoma.blog.posts.entities.FollowerEntity;
 import com.ogoma.blog.posts.entities.PostEntity;
 import com.ogoma.blog.posts.entities.UserProfileStats;
-import com.ogoma.blog.posts.entities.FollowerEntity;
 import com.ogoma.blog.notifications.NotificationEntity;
 import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.*;
@@ -12,9 +12,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @Getter
@@ -33,15 +31,15 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String lastName;
     @Setter
     private String phoneNumber;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Getter
     private UserProfileStats profileStats;
     @ManyToMany
     @Getter
     public Set<RoleEntity> roles = new HashSet<>();
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST},mappedBy = "user")
     @Getter
-    Set<FollowerEntity> followers = new HashSet<>();
+    List<FollowerEntity> followers = new ArrayList<>();
     @ManyToMany
     Set<NotificationEntity> notifications = new HashSet<>();
 
@@ -54,14 +52,21 @@ public class UserEntity extends BaseEntity implements UserDetails {
 //    Set<BlogEntity>
 
 
-    public void addFollower(FollowerEntity follower) {
-        UserEntity otherUser = follower.getFollower();
-        otherUser.incrementFollowing();
-        this.followers.add(follower);
-        if (profileStats != null) {
-            this.profileStats.incrementFollowerCount();
+    public void addFollower(UserEntity follower) {
+        if (profileStats == null) {
+            profileStats = new UserProfileStats();
         }
+        FollowerEntity followerEntity = new FollowerEntity();
+        followerEntity.setUser(this);
+        followerEntity.setFollower(follower);
+        if (follower.profileStats == null) {
+            follower.profileStats = new UserProfileStats();
+        }
+        follower.incrementFollowing();
+        this.profileStats.incrementFollowerCount();
+        this.followers.add(followerEntity);
     }
+
 
     public void addNotification(NotificationEntity notificationEntity) {
         this.notifications.add(notificationEntity);
@@ -85,9 +90,8 @@ public class UserEntity extends BaseEntity implements UserDetails {
         this.profileStats.decrementFollowing();
     }
 
-    public void removeFollower(FollowerEntity follower) {
-        UserEntity otherUser = follower.getFollower();
-        otherUser.decrementFollowing();
+    public void removeFollower(UserEntity follower) {
+        follower.decrementFollowing();
         this.followers.remove(follower);
         if (profileStats != null) {
             this.profileStats.decrementFollowerCount();
