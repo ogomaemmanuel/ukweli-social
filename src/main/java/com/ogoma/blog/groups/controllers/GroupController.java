@@ -1,10 +1,11 @@
 package com.ogoma.blog.groups.controllers;
 
-import com.ogoma.blog.posts.dto.BlogCreateRequest;
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
+import com.ogoma.blog.groups.entities.GroupID;
 import com.ogoma.blog.groups.services.GroupService;
 import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;
 import com.ogoma.blog.iam.entities.UserEntity;
+import com.ogoma.blog.posts.dto.BlogCreateRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/groups")
@@ -31,8 +34,8 @@ public class GroupController {
     }
 
     @PostMapping("/{groupId}/likes")
-    public ResponseEntity<Void> likeGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserEntity currentUser) {
-        this.groupService.likeGroup(groupId, currentUser);
+    public ResponseEntity<Void> likeGroup(@PathVariable UUID groupId, @AuthenticationPrincipal UserEntity currentUser) {
+        this.groupService.likeGroup(new GroupID(groupId), currentUser);
         return ResponseEntity.ok().build();
     }
 
@@ -42,17 +45,17 @@ public class GroupController {
     }
 
     @PostMapping("/{groupId}/posts")
-    public ResponseEntity<Void> postToGroup(@PathVariable Long groupId,
+    public ResponseEntity<Void> postToGroup(@PathVariable UUID groupId,
                                             BlogCreateRequest blogCreateRequest,
                                             @AuthenticationPrincipal UserEntity currentUser) {
-        this.groupService.postToGroup(groupId, currentUser, blogCreateRequest);
+        this.groupService.postToGroup(new GroupID(groupId), currentUser, blogCreateRequest);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{groupId}/join-requests")
-    public ResponseEntity<Void> requestToJoinGroup(@PathVariable Long groupId,
+    public ResponseEntity<Void> requestToJoinGroup(@PathVariable UUID groupId,
                                                    @AuthenticationPrincipal UserEntity userEntity) {
-        this.groupService.addJoinRequest(groupId, userEntity);
+        this.groupService.addJoinRequest(new GroupID(groupId), userEntity);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,8 +1,6 @@
 package com.ogoma.blog.security;
 
-import com.ogoma.blog.config.AppProperties;
 import com.ogoma.blog.config.AppPropertiesHolder;
-import jakarta.persistence.Entity;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.keygen.KeyGenerators;

@@ -1,16 +1,17 @@
 package com.ogoma.blog.posts.entities;
 
 import com.ogoma.blog.iam.entities.UserEntity;
-import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "followers")
-public class FollowerEntity {
+public class FollowerEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

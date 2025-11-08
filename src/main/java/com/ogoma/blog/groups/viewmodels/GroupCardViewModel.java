@@ -4,7 +4,8 @@ import com.ogoma.blog.groups.entities.GroupEntity;
 import com.ogoma.blog.groups.entities.GroupPrivacy;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 public class GroupCardViewModel {
@@ -15,13 +16,15 @@ public class GroupCardViewModel {
         this.createdAt = groupEntity.getCreatedAt();
         this.updatedAt = groupEntity.getUpdatedAt();
         this.viewOnly = groupEntity.isViewOnly();
+        this.id=groupEntity.getId().id();
         this.statistics = new GroupCardStatisticsViewModel(groupEntity.getGroupStats());
     }
     private final String name;
+    private final UUID id;
     private final String description;
     private final GroupPrivacy privacy;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private final Instant createdAt;
+    private final Instant updatedAt;
     private final boolean viewOnly;
     private final GroupCardStatisticsViewModel statistics;
 }

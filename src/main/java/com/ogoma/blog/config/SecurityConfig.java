@@ -1,6 +1,6 @@
 package com.ogoma.blog.config;
 
-import com.ogoma.blog.iam.entities.UserEntity;
+import com.ogoma.blog.iam.entities.UserID;
 import com.ogoma.blog.security.AppSecurityAuditAware;
 import com.ogoma.blog.security.PIIEncryptor;
 import org.springframework.context.annotation.Bean;
@@ -12,13 +12,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.util.List;
 
 @EnableMethodSecurity
 @EnableWebSecurity
@@ -46,7 +42,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public AuditorAware<UserEntity> auditorProvider() {
+    public AuditorAware<UserID> auditorProvider() {
         return new AppSecurityAuditAware();
     }
 }

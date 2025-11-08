@@ -1,7 +1,7 @@
 package com.ogoma.blog.groups.entities;
 
-import com.ogoma.blog.posts.entities.PostEntity;
 import com.ogoma.blog.iam.entities.UserEntity;
+import com.ogoma.blog.posts.entities.PostEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,5 +23,5 @@ public class GroupLikeEntity extends BaseEntity{
     @ManyToOne
     private UserEntity likedBy;
     @CreatedDate
-    private LocalDateTime createdDate;
+    private Instant createdDate;
 }

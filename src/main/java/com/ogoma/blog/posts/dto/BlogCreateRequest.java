@@ -13,7 +13,7 @@ public class BlogCreateRequest {
     private String title;
     private String content;
     private Set<String> mediaUrls;
-    public PostVisibility visibility;
-    public PostPublicationStatus publicationStatus;
+    private PostVisibility visibility;
+    private PostPublicationStatus publicationStatus;
 
 }

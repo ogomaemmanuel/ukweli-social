@@ -1,10 +1,11 @@
 package com.ogoma.blog.iam.services;
 
 
-import com.ogoma.blog.iam.viewmodels.UserCardViewModel;
 import com.ogoma.blog.exceptions.RecordNotFoundException;
 import com.ogoma.blog.iam.entities.UserEntity;
+import com.ogoma.blog.iam.entities.UserID;
 import com.ogoma.blog.iam.repositories.UserRepository;
+import com.ogoma.blog.iam.viewmodels.UserCardViewModel;
 import com.ogoma.blog.iam.viewmodels.UserProfileDetailsViewModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +24,13 @@ public class UserService {
     }
 
 
-    public UserProfileDetailsViewModel getUserDetailsByUserId(Long userId) {
+    public UserProfileDetailsViewModel getUserDetailsByUserId(UserID userId) {
         return this.userRepository.findById(userId).map(UserProfileDetailsViewModel::new).orElseThrow(() -> new RecordNotFoundException("User not found with id " + userId));
     }
 
 
     @Transactional
-    public void followUser(Long userIdToFollow, UserEntity currentUser) {
+    public void followUser(UserID userIdToFollow, UserEntity currentUser) {
         this.userRepository.findById(currentUser.getId()).ifPresent(follower -> {
             UserEntity followedUser = this.userRepository.getReferenceById(userIdToFollow);
             followedUser.addFollower(follower);
@@ -37,10 +38,9 @@ public class UserService {
         });
     }
 
-    public void unfollowUser(Long userIdToFollow, UserEntity currentUser) {
-        UserEntity followerEntity = new UserEntity();
+    public void unfollowUser(UserID userIdToFollow, UserEntity currentUser) {
         UserEntity followedUser = this.userRepository.getReferenceById(userIdToFollow);
-        followedUser.removeFollower(followerEntity);
+        followedUser.removeFollower(currentUser);
         this.userRepository.save(followedUser);
     }
 

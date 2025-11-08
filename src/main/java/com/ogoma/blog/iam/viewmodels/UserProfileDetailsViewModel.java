@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ogoma.blog.iam.entities.UserEntity;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 @Getter
 public class UserProfileDetailsViewModel {
 
@@ -24,6 +24,6 @@ public class UserProfileDetailsViewModel {
     private String lastName;
     private String phoneNumber;
     @JsonProperty("joinDate")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
     private UserProfileSummaryViewModel profileSummary;
 }

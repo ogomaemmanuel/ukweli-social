@@ -1,20 +1,15 @@
 package com.ogoma.blog.setup;
 
-import com.ogoma.blog.iam.entities.UserEntity;
+import com.ogoma.blog.iam.entities.UserID;
 import jakarta.persistence.*;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.catalina.User;
-import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @MappedSuperclass
 @Getter
@@ -22,27 +17,26 @@ import java.time.LocalDateTime;
 //@SoftDelete
 @EntityListeners(AuditingEntityListener.class)
 //@DynamicUpdate
-public class BaseEntity  implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+public class BaseEntity implements Serializable {
+
     @Version
-    private Long version;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    protected Long version;
+    protected Instant createdAt;
+    protected Instant updatedAt;
     @CreatedBy
-    private UserEntity createdBy;
-
+    @AttributeOverride(name = "id",
+            column = @Column(name = "created_by"))
+    @Embedded
+    protected UserID createdBy;
     @LastModifiedBy
-    @ManyToOne(fetch = FetchType.LAZY)
-    public UserEntity lastModifiedBy;
-    @NaturalId
-    @UuidGenerator(style = UuidGenerator.Style.TIME)
-    private String systemGeneratedId;
+    @AttributeOverride(name = "id",
+            column = @Column(name = "last_modified_by"))
+    @Embedded
+    protected UserID lastModifiedBy;
 
-
+    protected BaseEntity() {
+        var now = Instant.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
 }

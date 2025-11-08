@@ -5,45 +5,70 @@ import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
-@Table(name="groups")
+@Table(name = "groups")
 public class GroupEntity extends BaseEntity {
-    @Setter
+    @EmbeddedId
+    private final GroupID id;
     private String name;
-    @Setter
     private String description;
     @JdbcTypeCode(SqlTypes.JSON)
     @Getter
     private GroupStats groupStats;
-    @Setter
     @Enumerated(EnumType.STRING)
     private GroupPrivacy privacy;
-    @Setter
     //only admins can post other members cannot if isViewOnly
     private boolean viewOnly;
-    @Getter
-    @ManyToMany(cascade = {CascadeType.MERGE,  CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "group_members_join_tbl")
-    private Set<GroupMemberEntity> members = new HashSet<>();
-    @Getter
+    private final List<GroupMemberEntity> members;
     @OneToMany(
             cascade = {CascadeType.MERGE, CascadeType.PERSIST},
-            mappedBy =GroupJoinRequestEntity_.GROUP)
-    private Set<GroupJoinRequestEntity> joinRequests = new HashSet<>();
-
-    @Getter
+            mappedBy = GroupJoinRequestEntity_.GROUP)
+    private List<GroupJoinRequestEntity> joinRequests;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<PostEntity> blogs = new HashSet<>();
+    private final List<PostEntity> blogs;
+
+    protected GroupEntity() {
+        super();
+        this.id = new GroupID();
+        members = new ArrayList<>();
+        blogs = new ArrayList<>();
+        joinRequests = new ArrayList<>();
+    }
+
+    private GroupEntity(
+            String name,
+            String description,
+            GroupPrivacy privacy,
+            boolean viewOnly
+    ) {
+        this();
+        this.name = name;
+        this.description = description;
+        this.privacy = privacy;
+        this.viewOnly = viewOnly;
+    }
+
+
+    public static GroupEntity createNew(
+            String name,
+            String description,
+            GroupPrivacy privacy,
+            boolean viewOnly
+            ) {
+        return new GroupEntity(name,description,privacy,viewOnly);
+    }
+
 
     public void addMembers(GroupMemberEntity... groupMembers) {
         this.members.addAll(List.of(groupMembers));
