@@ -15,15 +15,17 @@ public class DbInitializer implements CommandLineRunner {
     public DbInitializer(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @Override
     public void run(String... args) throws Exception {
         if (this.userRepository.count() == 0) {
-            UserEntity userEntity = new UserEntity();
-            userEntity.setUsername("emmanuel");
-            userEntity.setFirstName("Emmanuel");
-            userEntity.setLastName("Test");
-            userEntity.setPassword("password");
-            userEntity.setEmail("test@ogoma.com");
+            UserEntity userEntity = UserEntity.createNew(
+                    "emmanuel",
+                    "password",
+                    "test@ogoma.emmanuel",
+                    "Emmanuel",
+                    "Ogoma",
+                    "+72555363636");
             this.userRepository.save(userEntity);
         }
     }

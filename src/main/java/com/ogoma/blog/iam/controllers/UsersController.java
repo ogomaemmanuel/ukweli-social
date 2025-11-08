@@ -1,6 +1,7 @@
 package com.ogoma.blog.iam.controllers;
 
 import com.ogoma.blog.iam.entities.UserEntity;
+import com.ogoma.blog.iam.entities.UserID;
 import com.ogoma.blog.iam.services.UserService;
 import com.ogoma.blog.iam.viewmodels.UserCardViewModel;
 import com.ogoma.blog.iam.viewmodels.UserProfileDetailsViewModel;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -36,14 +39,14 @@ public class UsersController {
 
 
     @PostMapping("/{userId}/follow")
-    public ResponseEntity<Void> follow(@PathVariable Long userId, @AuthenticationPrincipal UserEntity user) {
-        this.userService.followUser(userId, user);
+    public ResponseEntity<Void> follow(@PathVariable UUID userId, @AuthenticationPrincipal UserEntity user) {
+        this.userService.followUser(new UserID(userId), user);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{userId}/unfollow")
-    public ResponseEntity<Void> unfollow(@PathVariable Long userId, @AuthenticationPrincipal UserEntity user) {
-        this.userService.unfollowUser(userId, user);
+    public ResponseEntity<Void> unfollow(@PathVariable UUID userId, @AuthenticationPrincipal UserEntity user) {
+        this.userService.unfollowUser(new UserID(userId), user);
         return ResponseEntity.ok().build();
     }
 

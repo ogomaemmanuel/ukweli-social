@@ -1,13 +1,13 @@
 package com.ogoma.blog.groups.services;
 
-import com.ogoma.blog.posts.dto.BlogCreateRequest;
-import com.ogoma.blog.posts.entities.PostEntity;
 import com.ogoma.blog.exceptions.RecordNotFoundException;
 import com.ogoma.blog.groups.dto.GroupCreateRequestDto;
 import com.ogoma.blog.groups.entities.*;
 import com.ogoma.blog.groups.repository.GroupRepository;
 import com.ogoma.blog.groups.viewmodels.GroupCardViewModel;
 import com.ogoma.blog.iam.entities.UserEntity;
+import com.ogoma.blog.posts.dto.BlogCreateRequest;
+import com.ogoma.blog.posts.entities.PostEntity;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
@@ -26,19 +26,17 @@ public class GroupService {
 
     @Transactional
     public void createGroup(GroupCreateRequestDto createRequestDto, UserEntity userEntity) {
-        GroupEntity groupEntity = new GroupEntity();
-        groupEntity.setDescription(createRequestDto.getDescription());
-        groupEntity.setName(createRequestDto.getName());
-        groupEntity.setViewOnly(createRequestDto.isViewOnly());
-        GroupMemberEntity groupMemberEntity = new GroupMemberEntity();
-        groupMemberEntity.setUserEntity(userEntity);
-        groupMemberEntity.setMembershipRole(GroupRole.ADMIN);
+        GroupEntity groupEntity = GroupEntity.createNew(
+                createRequestDto.getName(),
+                createRequestDto.getDescription(),
+                createRequestDto.getPrivacy(),
+                createRequestDto.isViewOnly());
+        GroupMemberEntity groupMemberEntity = GroupMemberEntity.createNew(userEntity.getId(),GroupRole.ADMIN);
         groupEntity.addMembers(groupMemberEntity);
         this.groupRepository.save(groupEntity);
     }
 
     public Page<GroupCardViewModel> getGroups(Pageable pageable) {
-
         return this.groupRepository.findAll((root, _, criteriaBuilder) -> {
             root.fetch(GroupEntity_.CREATED_BY, JoinType.LEFT);
             root.fetch(GroupEntity_.LAST_MODIFIED_BY, JoinType.LEFT);
@@ -47,7 +45,7 @@ public class GroupService {
     }
 
     @Transactional
-    public void likeGroup(Long groupId, UserEntity currentUser) {
+    public void likeGroup(GroupID groupId, UserEntity currentUser) {
         GroupLikeEntity groupLike = new GroupLikeEntity();
         groupLike.setLikedBy(currentUser);
         GroupEntity group = this.groupRepository.getReferenceById(groupId);
@@ -56,20 +54,21 @@ public class GroupService {
     }
 
     @Transactional
-    public void postToGroup(Long groupId, UserEntity currentUser, BlogCreateRequest blogCreateRequest) {
-        PostEntity blog = new PostEntity();
-        blog.setContent(blogCreateRequest.getContent());
-        blog.setMedialUrls(blogCreateRequest.getMediaUrls());
-        blog.setTitle(blogCreateRequest.getTitle());
-        blog.setForGroup(true);
-        blog.setVisibility(blogCreateRequest.getVisibility());
+    public void postToGroup(GroupID groupId, UserEntity currentUser, BlogCreateRequest blogCreateRequest) {
+        PostEntity postEntity= PostEntity.createNewPost(
+                blogCreateRequest.getTitle(),
+                blogCreateRequest.getContent(),
+                blogCreateRequest.getVisibility(),
+                blogCreateRequest.getMediaUrls(),
+                true
+                );
         GroupEntity group = groupRepository.getReferenceById(groupId);
-        group.addPost(blog);
+        group.addPost(postEntity);
         this.groupRepository.save(group);
     }
 
     @Transactional
-    public void addJoinRequest(Long groupId, UserEntity currentUser) {
+    public void addJoinRequest(GroupID groupId, UserEntity currentUser) {
         try {
             GroupEntity group = this.groupRepository.getReferenceById(groupId);
             GroupJoinRequestEntity joinRequestEntity = new GroupJoinRequestEntity();

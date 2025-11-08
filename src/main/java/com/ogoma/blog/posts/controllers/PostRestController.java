@@ -1,11 +1,12 @@
 package com.ogoma.blog.posts.controllers;
 
+import com.ogoma.blog.iam.entities.UserEntity;
 import com.ogoma.blog.posts.dto.BlogCommentCreateRequest;
 import com.ogoma.blog.posts.dto.BlogCreateRequest;
+import com.ogoma.blog.posts.entities.PostID;
 import com.ogoma.blog.posts.services.PostsService;
 import com.ogoma.blog.posts.viewmodels.BlogCardViewModel;
 import com.ogoma.blog.posts.viewmodels.BlogEditViewModel;
-import com.ogoma.blog.iam.entities.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/blogs")
@@ -37,30 +40,32 @@ public class PostRestController {
     }
 
     @PostMapping("/{blogId}/comments")
-    public ResponseEntity<Void> addComment(@PathVariable Long blogId,
+    public ResponseEntity<Void> addComment(@PathVariable UUID blogId,
                                            @RequestBody @Valid BlogCommentCreateRequest commentCreateRequest,
                                            @AuthenticationPrincipal UserEntity currentUser) {
-        this.blogService.addComment(blogId, commentCreateRequest, currentUser);
+        this.blogService.addComment(new PostID(blogId), commentCreateRequest, currentUser);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{blogId}/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long blogId,
+    public ResponseEntity<Void> deleteComment(@PathVariable UUID blogId,
                                               @PathVariable Long commentId,
                                               @AuthenticationPrincipal UserEntity currentUser) {
-        this.blogService.deleteComment(blogId, commentId, currentUser);
+        this.blogService.deleteComment(new PostID(blogId), commentId, currentUser);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{blogId}/likes")
-    public ResponseEntity<Void> likeBlogPost(@PathVariable Long blogId, @AuthenticationPrincipal UserEntity userEntity) {
-        this.blogService.likeBlogPost(blogId, userEntity);
+    public ResponseEntity<Void> likeBlogPost(@PathVariable UUID blogId,
+                                             @AuthenticationPrincipal UserEntity userEntity) {
+        this.blogService.likeBlogPost(new PostID(blogId), userEntity);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{blogId}/unlike")
-    public ResponseEntity<Void> updateBlogLike(@PathVariable Long blogId, @AuthenticationPrincipal UserEntity userEntity) {
-        this.blogService.unlikeBlogPost(blogId, userEntity);
+    public ResponseEntity<Void> updateBlogLike(@PathVariable UUID blogId,
+                                               @AuthenticationPrincipal UserEntity userEntity) {
+        this.blogService.unlikeBlogPost(new PostID(blogId), userEntity);
         return ResponseEntity.ok().build();
     }
 

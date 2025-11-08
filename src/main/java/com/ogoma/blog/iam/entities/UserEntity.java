@@ -1,10 +1,10 @@
 package com.ogoma.blog.iam.entities;
 
 import com.ogoma.blog.config.SecurityConfig;
+import com.ogoma.blog.notifications.NotificationEntity;
 import com.ogoma.blog.posts.entities.FollowerEntity;
 import com.ogoma.blog.posts.entities.PostEntity;
 import com.ogoma.blog.posts.entities.UserProfileStats;
-import com.ogoma.blog.notifications.NotificationEntity;
 import com.ogoma.blog.setup.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,6 +19,9 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 public class UserEntity extends BaseEntity implements UserDetails {
+    @EmbeddedId
+    private UserID id;
+
     @Setter
     private String username;
     @Setter
@@ -36,20 +39,51 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private UserProfileStats profileStats;
     @ManyToMany
     @Getter
-    public Set<RoleEntity> roles = new HashSet<>();
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST},mappedBy = "user")
+    private Set<RoleEntity> roles = new HashSet<>();
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "user")
     @Getter
-    List<FollowerEntity> followers = new ArrayList<>();
+    private List<FollowerEntity> followers = new ArrayList<>();
     @ManyToMany
-    Set<NotificationEntity> notifications = new HashSet<>();
+    private Set<NotificationEntity> notifications = new HashSet<>();
 
-    @OneToMany
-    Set<PostEntity> blogsCreated = new HashSet<>();
+    @OneToMany()
+    private Set<PostEntity> blogsCreated = new HashSet<>();
 
     @ManyToMany
-    Set<PostEntity> likedBlogs = new HashSet<>();
+    private Set<PostEntity> likedBlogs = new HashSet<>();
 
 //    Set<BlogEntity>
+
+
+    protected UserEntity() {
+        super();
+        id = new UserID();
+    }
+
+    private UserEntity(String username,
+                       String password,
+                       String email,
+                       String firstName,
+                       String lastName,
+                       String phoneNumber
+    ) {
+        this();
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public static UserEntity createNew(String username,
+                                       String password,
+                                       String email,
+                                       String firstName,
+                                       String lastName,
+                                       String phoneNumber) {
+        return new UserEntity(username, password, email, firstName, lastName, phoneNumber);
+    }
 
 
     public void addFollower(UserEntity follower) {

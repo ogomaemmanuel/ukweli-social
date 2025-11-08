@@ -1,19 +1,21 @@
 package com.ogoma.blog.posts.repository;
 
 import com.ogoma.blog.posts.entities.PostEntity;
+import com.ogoma.blog.posts.entities.PostID;
 import com.ogoma.blog.setup.BaseRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface BlogRepository extends BaseRepository<PostEntity> {
+public interface BlogRepository extends JpaRepository<PostEntity, PostID> {
 
     @Query( value = "SELECT EXISTS(Select count(pc.id) from PostCommentsEntity pc WHERE pc.blog.id = :postId AND pc.id = :commentId)")
-    boolean existsByBlogIdAndCommentId(Long postId, Long commentId);
+    boolean existsByBlogIdAndCommentId(PostID postId, Long commentId);
 
 
     @Query(value = "SELECT pe from PostEntity pe inner join fetch pe.comments pc where pe.id =:blogId and pc.id=:commentId")
-   Optional<PostEntity> findByBlogIdAndCommentId(Long blogId, Long commentId);
+   Optional<PostEntity> findByBlogIdAndCommentId(PostID blogId, Long commentId);
 }

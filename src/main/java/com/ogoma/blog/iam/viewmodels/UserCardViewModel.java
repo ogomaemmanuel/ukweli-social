@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ogoma.blog.iam.entities.UserEntity;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 public class UserCardViewModel {
     public UserCardViewModel(UserEntity user) {
-        this.id = user.getId();
+        this.id = user.getId().id();
         this.userName = user.getUsername();
         this.phoneNumber = user.getPhoneNumber();
         this.firstName = user.getFirstName();
@@ -18,12 +19,12 @@ public class UserCardViewModel {
         this.profileSummary = new UserProfileSummaryViewModel(user.getProfileStats());
     }
 
-    private final Long id;
+    private final UUID id;
     private final String userName;
     private final String firstName;
     private final String lastName;
     private final String phoneNumber;
     @JsonProperty("joinDate")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
     private final UserProfileSummaryViewModel profileSummary;
 }
